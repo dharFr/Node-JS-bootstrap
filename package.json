@@ -1,0 +1,13 @@
+{
+    "name": "application-name"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.5.8"
+    , "jade": ">= 0.0.1"
+    , "coffee-script": "1.2.0"
+    , "qs": "0.4.2"
+    , "connect-assets": "2.1.8"
+    , "mongoskin": "0.3.0"
+  }
+}

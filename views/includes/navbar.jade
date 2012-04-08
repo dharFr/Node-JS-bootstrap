@@ -1,0 +1,35 @@
+div.navbar.navbar-fixed-top
+  div.navbar-inner
+    div.container
+      a(data-toggle="collapse", data-target=".nav-collapse").btn.btn-navbar
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a(href='#').brand #{title}
+      
+      div.nav-collapse
+        ul.nav
+          li.active
+            a(href='#') Home
+          li
+            a(href='#about') About
+
+        ul.nav.pull-right
+          if user
+
+              li.dropdown
+                a.dropdown-toggle(href="#", data-toggle="dropdown") #{user}
+                  b.caret
+                ul.dropdown-menu
+                  li
+                    a(href="#profile") Profile
+                  li 
+                    a(href='/logout') Logout
+
+          else
+            li 
+              form(id="login-form", action="/auth", method="POST", style="display: none;")
+                input(id="assertion-field", type="hidden", name="assertion", value="")
+              a#browserid(href='/auth') 
+                img(src="/img/sign_in_orange.png", alt="Sign in", width="79", height="22")
+                
