@@ -5,24 +5,24 @@ div.navbar.navbar-fixed-top
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a(href='#').brand #{title}
+      a(href='/').brand #{title}
       
       div.nav-collapse
         ul.nav
           li.active
-            a(href='#') Home
+            a(href='/') Home
           li
-            a(href='#about') About
+            a(href='/#about') About
 
         ul.nav.pull-right
           if user
 
               li.dropdown
-                a.dropdown-toggle(href="#", data-toggle="dropdown") #{user}
+                a.dropdown-toggle(href="#", data-toggle="dropdown") #{user.email}
                   b.caret
                 ul.dropdown-menu
                   li
-                    a(href="#profile") Profile
+                    a(href="/profile") Profile
                   li 
                     a(href='/logout') Logout
 

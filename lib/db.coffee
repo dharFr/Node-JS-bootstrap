@@ -14,7 +14,9 @@ db = null
 
 module.exports = 
 	init: (config) -> 
+		console.info 'init db with utl:', generate_mongo_url config
 		db = mongo.db "#{generate_mongo_url config}?auto_reconnect"
+		console.info 'db connected:', db.db.databaseName
 		return
 		
 	db: -> db

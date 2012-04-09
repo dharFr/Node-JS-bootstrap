@@ -1,6 +1,5 @@
 express = require 'express'
 assets = require 'connect-assets'
-routes = require './routes'
 secrets = require './lib/secrets'
 
 app = module.exports = express.createServer()
@@ -28,6 +27,11 @@ else
 # mongodb init
 require('./lib/db').init mongo
 
+# init routes
+routes = require './routes'
+
+publicDir = "#{__dirname}/public"
+
 app.configure ->
 	app.set 'views', __dirname + '/views'
 	app.set 'view engine', 'jade'
@@ -36,7 +40,7 @@ app.configure ->
 	app.use express.cookieParser()
 	app.use express.session secret: secrets.session
 	app.use app.router
-	app.use express.static(__dirname + '/public')
+	app.use express.static publicDir
 	app.use assets() #build: true
 
 app.configure 'development', ->
@@ -48,8 +52,21 @@ app.configure 'development', ->
 app.configure 'production', ->
 	app.use( express.errorHandler() )
 
+# 404 Page
+app.use (req, res, next) ->
+	# seems the header isn't correctly sent (client receives 200)
+	# Need to find a better way...
+	res.header('Status', '404');
+	res.sendfile "#{publicDir}/404.html"
+
 # Routes
-app.post '/auth', routes.auth(AUDIENCE)
-app.get '/logout', routes.logout
-app.get '/', routes.index
+app.post '/auth', routes.auth.auth(AUDIENCE)
+app.get '/logout', routes.auth.logout
+
+needAuth = [routes.profile.loadUser, routes.profile.needUser]
+
+app.get '/profile', needAuth, routes.profile.show
+app.post '/profile', needAuth, routes.profile.save
+
+app.get '/', routes.profile.loadUser, routes.main.index
 exports = app
