@@ -54,9 +54,7 @@ app.configure 'production', ->
 
 # 404 Page
 app.use (req, res, next) ->
-	# seems the header isn't correctly sent (client receives 200)
-	# Need to find a better way...
-	res.header('Status', '404');
+  	res.status(404)
 	res.sendfile "#{publicDir}/404.html"
 
 # Routes
