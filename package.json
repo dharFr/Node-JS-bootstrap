@@ -3,11 +3,12 @@
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-      "express": "2.5.8"
-    , "jade": ">= 0.0.1"
-    , "coffee-script": "1.2.0"
+      "express": "2.5.9"
+    , "jade": "0.24.0"
+    , "coffee-script": "1.3.1"
     , "qs": "0.4.2"
-    , "connect-assets": "2.1.8"
-    , "mongoskin": "0.3.0"
+    , "connect-assets": "2.1.9"
+    , "connect": "2.1.2"
+    , "mongoose": "2.5.14"
   }
 }

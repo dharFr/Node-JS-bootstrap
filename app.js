@@ -2,5 +2,7 @@ require("coffee-script");
 
 var app = require('./startup');
 
-app.listen(process.env.VMC_APP_PORT || 3000, process.env.VCAP_APP_HOST);
-console.log("Express server running");
+var port = process.env.PORT || 3000
+
+app.listen(port);
+console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

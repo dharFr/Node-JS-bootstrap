@@ -45,5 +45,5 @@ module.exports =
 			request.end()
 	
 	logout: (req, resp) ->
-		req.session.destroy()
+		req.session = null
 		resp.redirect '/'

@@ -1,13 +1,13 @@
-User = require('../models/User').User
+User = require('../models/users').User
 
 module.exports =
 	loadUser: (req, res, next) -> 
-		console.log 'loadUser middleware', req.session.email
 		if req.session.email
-			User::findByEmail req.session.email, (user) ->
-				req.user = if user then user else new User req.session.email
+			User.findByEmail(req.session.email, (user) ->
+				req.user = if user then user else new User({email: req.session.email})
 				console.info '|- found:', req.user
 				next()
+			)
 		else
 			next()
 
@@ -28,6 +28,7 @@ module.exports =
 	save: (req, res, next) -> 
 		console.info 'profile.save', req.user, req.body.user
 		req.user.name = req.body.user.name
+		req.user.firstName = req.body.user.firstName
 		req.user.save()
 		res.redirect 'back'
 
