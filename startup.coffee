@@ -68,4 +68,13 @@ app.get '/profile', needAuth, routes.profile.show
 app.post '/profile', needAuth, routes.profile.save
 
 app.get '/', routes.profile.loadUser, routes.main.index
+
+app.helpers {
+	appName: 'Sample node app'
+}
+
+app.dynamicHelpers {
+	user: (req, res) -> req.user
+}
+
 exports = app

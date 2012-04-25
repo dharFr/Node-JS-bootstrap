@@ -21,9 +21,7 @@ module.exports =
 
 	show: (req, res, next) -> 
 		console.info 'profile.show', req.user
-		res.render 'profile', 
-			title: 'Sample node app'
-			user: req.user || {email: req.session.email}
+		res.render 'profile'
 
 	save: (req, res, next) -> 
 		console.info 'profile.save', req.user, req.body.user
