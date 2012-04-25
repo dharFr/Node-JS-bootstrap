@@ -39,9 +39,19 @@ app.configure ->
 	app.use express.methodOverride()
 	app.use connect.cookieParser(process.env.SECRET || 'my hard to guess secret')
 	app.use connect.cookieSession(cookie: { maxAge: 30 * 60 * 1000 })
+	app.use connect.csrf()
 	app.use app.router
 	app.use express.static publicDir
 	app.use assets() #build: true
+
+app.use (err, req, res, next) ->
+	if err.status
+		res.status(err.status)
+	
+	if err.status == 403
+		res.sendfile "#{publicDir}/403.html"
+	else
+		next(err)
 
 app.configure 'development', ->
 	app.use( express.errorHandler(
@@ -75,6 +85,7 @@ app.helpers {
 
 app.dynamicHelpers {
 	user: (req, res) -> req.user
+	_csrf: (req, res) -> req.session._csrf
 }
 
 exports = app

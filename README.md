@@ -9,6 +9,7 @@ Feel free to clone and/or contribute :)
 - coffeescript
 - connect-assets
 - cookie session storage
+- csrf protection
 - Heroku ready
 - mongoose (MongoDB)
 - login via Mozilla's Persona (ex browserid)
