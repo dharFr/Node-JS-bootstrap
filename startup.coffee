@@ -54,7 +54,7 @@ app.configure 'production', ->
 
 # 404 Page
 app.use (req, res, next) ->
-  	res.status(404)
+	res.status(404)
 	res.sendfile "#{publicDir}/404.html"
 
 # Routes
