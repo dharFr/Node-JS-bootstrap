@@ -10,6 +10,6 @@ Feel free to clone and/or contribute :)
 - connect-assets
 - cookie session storage
 - csrf protection
-- Heroku ready
+- Heroku & CloudFoundry ready
 - mongoose (MongoDB)
 - login via Mozilla's Persona (ex browserid)
