@@ -2,10 +2,15 @@ section
 	div.page-header(id='content') 
 		h1 Profile
 	form.form-horizontal(method="post")
+		input(id="_csrf", type="hidden", name="_csrf", value="#{_csrf}")
 		div.control-group
 			label(for="username") Name
 			div.controls
-				input(type="text", name="user[name]", placeholder="Your name...", value="#{user.name || ''}", required)
+				input#username(type="text", name="user[name]", placeholder="Your name...", value="#{user.name || ''}", required)
+		div.control-group
+			label(for="userfirstname") First Name
+			div.controls
+				input#userfirstname(type="text", name="user[firstName]", placeholder="Your first name...", value="#{user.firstName || ''}", required)
 		div.control-group
 			label(for="email") Email
 			div.controls

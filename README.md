@@ -8,5 +8,8 @@ Feel free to clone and/or contribute :)
 - jade
 - coffeescript
 - connect-assets
-- mongoskin (MongoDB)
+- cookie session storage
+- csrf protection
+- Heroku ready
+- mongoose (MongoDB)
 - login via Mozilla's Persona (ex browserid)

@@ -1,34 +1,34 @@
-express = require 'express'
-assets = require 'connect-assets'
-secrets = require './lib/secrets'
+express  = require 'express'
+assets   = require 'connect-assets'
+mongoose = require 'mongoose'
+connect  = require 'connect'
 
 app = module.exports = express.createServer()
 
 # browserId Configuration
-if process.env.VCAP_APPLICATION
-	AUDIENCE = "#{JSON.parse(process.env.VCAP_APPLICATION).uris[0]}"
+if process.env.HOST
+	AUDIENCE = process.env.HOST
 else
 	AUDIENCE = "http://localhost:3000"
+
 console.log "defined browserid AUDIENCE:", AUDIENCE
 
-# mongodb config
-if process.env.VCAP_SERVICES
-	env = JSON.parse process.env.VCAP_SERVICES
-	mongo = env['mongodb-1.8'][0]['credentials']
-else
-	mongo = 
-		"hostname":"localhost"
-		"port":27017
-		"username":""
-		"password":""
-		"name":""
-		"db":"db"
 
-# mongodb init
-require('./lib/db').init mongo
+# mongodb config
+mongoUrl = process.env.MONGOLAB_URI|| "mongdb://localhost:27017/db"
+
+console.log "mongoUrl : #{mongoUrl}"
+
+mongoose.connect(mongoUrl, (err) ->
+	if err then	throw err
+
+	console.log 'Connected to DB'
+)
 
 # init routes
 routes = require './routes'
+
+console.log "Routes loaded"
 
 publicDir = "#{__dirname}/public"
 
@@ -37,17 +37,27 @@ app.configure ->
 	app.set 'view engine', 'jade'
 	app.use express.bodyParser()
 	app.use express.methodOverride()
-	app.use express.cookieParser()
-	app.use express.session secret: secrets.session
+	app.use connect.cookieParser(process.env.SECRET || 'my hard to guess secret')
+	app.use connect.cookieSession(cookie: { maxAge: 30 * 60 * 1000 })
+	app.use connect.csrf()
 	app.use app.router
 	app.use express.static publicDir
 	app.use assets() #build: true
+
+app.use (err, req, res, next) ->
+	if err.status
+		res.status(err.status)
+	
+	if err.status == 403
+		res.sendfile "#{publicDir}/403.html"
+	else
+		next(err)
 
 app.configure 'development', ->
 	app.use( express.errorHandler(
 		dumpExceptions: true
 		showStack: true
-	) )
+	))
 
 app.configure 'production', ->
 	app.use( express.errorHandler() )
@@ -57,6 +67,7 @@ app.use (req, res, next) ->
 	res.status(404)
 	res.sendfile "#{publicDir}/404.html"
 
+console.log "Configuring URLs"
 # Routes
 app.post '/auth', routes.auth.auth(AUDIENCE)
 app.get '/logout', routes.auth.logout
@@ -67,4 +78,14 @@ app.get '/profile', needAuth, routes.profile.show
 app.post '/profile', needAuth, routes.profile.save
 
 app.get '/', routes.profile.loadUser, routes.main.index
+
+app.helpers {
+	appName: 'Sample node app'
+}
+
+app.dynamicHelpers {
+	user: (req, res) -> req.user
+	_csrf: (req, res) -> req.session._csrf
+}
+
 exports = app
